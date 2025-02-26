@@ -1,5 +1,7 @@
 import "dotenv/config";
 
+delete process.env.TEST_RUN;
+
 import { createRecipes } from "./recipes.js";
 import { sendRecipeEmail } from "./emails/index.js";
 

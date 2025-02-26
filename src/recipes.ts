@@ -11,16 +11,17 @@ const gemini2_0_flash = new GoogleGenerativeAI(
 
 async function generateRecipeData(): Promise<Recipe[]> {
   // When testing just return the latest 3 recipes from the database
+  const previousRecipes = await supabase
+    .from("recipes")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(6);
+
   if (process.env.TEST_RUN) {
     console.log("Using test data...");
-    const res = await supabase
-      .from("recipes")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(3);
 
     return (
-      res.data?.map((recipe) => ({
+      previousRecipes.data?.map((recipe) => ({
         id: recipe.id,
         name: recipe.name,
         description: recipe.description,
@@ -51,13 +52,21 @@ async function generateRecipeData(): Promise<Recipe[]> {
         history: [],
       });
 
+    const previousRecipeNames = previousRecipes.data
+      ?.map((r) => `${r.name}`)
+      .join(", ");
+
+    console.log("Previous recipes: ", previousRecipeNames);
+
     const recipePrompt = `
-Suggest 3 recipes which I can make for dinner this week. They should all be vegetarian. It's fine to have a little bit of dairy but it should be used sparingly. Recipes should make use of seasonal vegetables for this time of year in the Netherlands, but the dishes themselves don't need to be dutch. The preparation time can be anything up to 1h and each dish should serve 4 people. The output be JSON and should include:
+Suggest 3 recipes which I can make for dinner this week. They should all be vegetarian. It's fine to have a little bit of dairy but it should be used sparingly. Try to suggest a mixture of cuisines from around the world. The preparation time can be anything up to 1h and each dish should serve 4 people. The output be JSON and should include:
 - name: The name of the dish
 - mainIngredients: A string with two or three fresh ingredients from the dish
 - description: A 15 word description of what the dish looks like, making it sound tasty
 - ingredients: An ingredients list, which contains the name, quantity and unit of each ingredient
 - instructions: Instructions for preparing the dish
+
+Last weeks recipes were ${previousRecipeNames}, so please suggest something different.
     `;
 
     const result = await recipeSession.sendMessage(recipePrompt);
@@ -121,7 +130,7 @@ export async function createRecipes(): Promise<Recipe[]> {
         .eq("id", recipe.id!);
 
       if (res.error) {
-        throw new Error(`Failed to update recipe: ${res.error.message}`);
+        throw new Error(`Failed to update recipe: ${res.error?.message}`);
       }
     } catch (error) {
       console.error(`Failed to create image for ${recipe.name}: ${error}`);
