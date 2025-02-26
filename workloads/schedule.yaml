@@ -1,0 +1,30 @@
+name: Weekly Run
+
+on:
+  schedule:
+    # Every saturday at 4am
+    - cron: '0 4 * * 6'
+  workflow_dispatch:
+
+jobs:
+  run-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Script
+        run: npm run start
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_API_KEY: ${{ secrets.SUPABASE_SERVICE_API_KEY }}
+          SUPABASE_ANON_API_KEY: ${{ secrets.SUPABASE_ANON_API_KEY }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
