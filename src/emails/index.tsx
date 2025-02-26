@@ -8,8 +8,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export const sendRecipeEmail = async (recipes: Recipe[]) => {
   try {
     const res = await resend.emails.send({
-      from: "Veg Box <recipes@haydnjm.com>",
-      to: "haydn@haydnjm.com",
+      from: "Doosie <recipes@haydnjm.com>",
+      to: "hello@haydnjm.com",
       subject: `This week's recipes 🍄 🥙 🥑 🍅`,
       react: <RecipeEmail recipes={recipes} />,
     });
