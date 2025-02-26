@@ -63,7 +63,7 @@ Suggest 3 recipes which I can make for dinner this week. They should all be vege
 - name: The name of the dish
 - mainIngredients: A string with two or three fresh ingredients from the dish
 - description: A 15 word description of what the dish looks like, making it sound tasty
-- ingredients: An ingredients list, which contains the name, quantity and unit of each ingredient
+- ingredients: An ingredients list, where each entry should contain a name, quantity and unit
 - instructions: Instructions for preparing the dish
 
 Last weeks recipes were ${previousRecipeNames}, so please suggest something different.
@@ -75,7 +75,16 @@ Last weeks recipes were ${previousRecipeNames}, so please suggest something diff
 
     const resultText = result.response.text();
 
-    const recipes: Recipe[] = RecipesSchema.parse(JSON.parse(resultText));
+    const { data: recipes, error } = RecipesSchema.safeParse(
+      JSON.parse(resultText)
+    );
+
+    console.log(resultText);
+
+    if (error) {
+      console.error("Error parsing recipes: ", error);
+      return [];
+    }
 
     console.log(
       `Created recipes for this week: ${recipes.map((r) => r.name).join(", ")}`
