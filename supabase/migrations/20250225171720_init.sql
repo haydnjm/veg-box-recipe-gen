@@ -12,6 +12,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 
+CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
+
+
+
+
+
+
 CREATE EXTENSION IF NOT EXISTS "pgsodium";
 
 
@@ -76,7 +83,7 @@ CREATE TABLE IF NOT EXISTS "public"."recipes" (
     "description" "text" NOT NULL,
     "main_ingredients" "text" NOT NULL,
     "ingredients" "text"[] NOT NULL,
-    "instructions" "text" NOT NULL,
+    "instructions" "text"[] NOT NULL,
     "image" "text" NOT NULL
 );
 
@@ -104,6 +111,18 @@ ALTER TABLE ONLY "public"."recipes"
 
 
 
+CREATE POLICY "Anon INSERT" ON "public"."recipes" FOR INSERT TO "anon" WITH CHECK (true);
+
+
+
+CREATE POLICY "Anon SELECT" ON "public"."recipes" FOR SELECT TO "anon" USING (true);
+
+
+
+CREATE POLICY "Anon UPDATE" ON "public"."recipes" FOR UPDATE TO "anon" USING (true) WITH CHECK (true);
+
+
+
 ALTER TABLE "public"."recipes" ENABLE ROW LEVEL SECURITY;
 
 
@@ -112,10 +131,19 @@ ALTER TABLE "public"."recipes" ENABLE ROW LEVEL SECURITY;
 ALTER PUBLICATION "supabase_realtime" OWNER TO "postgres";
 
 
+
+
+
 GRANT USAGE ON SCHEMA "public" TO "postgres";
 GRANT USAGE ON SCHEMA "public" TO "anon";
 GRANT USAGE ON SCHEMA "public" TO "authenticated";
 GRANT USAGE ON SCHEMA "public" TO "service_role";
+
+
+
+
+
+
 
 
 
@@ -378,3 +406,8 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 
 
 RESET ALL;
+
+--
+-- Dumped schema changes for auth and storage
+--
+

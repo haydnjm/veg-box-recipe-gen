@@ -9,6 +9,12 @@ const gemini2_0_flash = new GoogleGenerativeAI(
   process.env.GEMINI_API_KEY || ""
 );
 
+const storageBucket =
+  process.env.STORAGE_BUCKET ||
+  (() => {
+    throw new Error("STORAGE_BUCKET is required");
+  })();
+
 async function generateRecipeData(): Promise<Recipe[]> {
   // When testing just return the latest 3 recipes from the database
   const previousRecipes = await supabase
@@ -170,7 +176,7 @@ async function saveRecipeImage(
 
   const {
     data: { publicUrl },
-  } = supabase.storage.from("recipe-images").getPublicUrl(fileName);
+  } = supabase.storage.from(storageBucket).getPublicUrl(fileName);
 
   console.log(`Successfully uploaded image to: ${publicUrl}`);
 

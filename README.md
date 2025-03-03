@@ -44,6 +44,8 @@ npm install
 cp .env.example .env
 ```
 
+Use the table above to help populate the env file
+
 ### 3. Configure Supabase (for local dev)
 
 ```bash
