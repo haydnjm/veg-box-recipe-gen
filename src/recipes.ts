@@ -23,25 +23,6 @@ async function generateRecipeData(): Promise<Recipe[]> {
     .order("created_at", { ascending: false })
     .limit(6);
 
-  if (process.env.TEST_RUN) {
-    console.log("Using test data...");
-
-    return (
-      previousRecipes.data?.map((recipe) => ({
-        id: recipe.id,
-        name: recipe.name,
-        description: recipe.description,
-        ingredients: recipe.ingredients.map((i) =>
-          IngredientSchema.parse(JSON.parse(i))
-        ),
-        instructions: recipe.instructions,
-        mainIngredients: recipe.main_ingredients,
-        image: recipe.image,
-        createdAt: new Date(recipe.created_at),
-      })) || []
-    );
-  }
-
   try {
     const recipeSession = gemini2_0_flash
       .getGenerativeModel({
@@ -85,8 +66,6 @@ Last weeks recipes were ${previousRecipeNames}, so please suggest something diff
       JSON.parse(resultText)
     );
 
-    console.log(resultText);
-
     if (error) {
       console.error("Error parsing recipes: ", error);
       return [];
@@ -106,30 +85,7 @@ Last weeks recipes were ${previousRecipeNames}, so please suggest something diff
 export async function createRecipes(): Promise<Recipe[]> {
   const recipes = await generateRecipeData();
 
-  if (process.env.TEST_RUN) {
-    return recipes;
-  }
-
   for (const recipe of recipes) {
-    if (!process.env.TEST_RUN) {
-      const res = await supabase
-        .from("recipes")
-        .insert({
-          name: recipe.name,
-          description: recipe.description,
-          ingredients: recipe.ingredients.map((i) => JSON.stringify(i)),
-          instructions: recipe.instructions,
-          main_ingredients: recipe.mainIngredients,
-          image: `https://placehold.co/1024x1024`,
-        })
-        .select();
-      if (res.error) {
-        throw new Error(`Failed to insert recipe: ${res.error.message}`);
-      }
-
-      recipe.id = res.data[0].id;
-    }
-
     try {
       const image = await createImage(
         recipe.name,

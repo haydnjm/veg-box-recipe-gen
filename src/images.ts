@@ -29,7 +29,7 @@ export async function createImage(
   };
 
   const response = await axios.postForm(
-    `https://api.stability.ai/v2beta/stable-image/generate/ultra`,
+    `https://api.stability.ai/v2beta/stable-image/generate/${process.env.STABILITY_API_MODEL || "core"}`,
     axios.toFormData(payload, new FormData()),
     {
       validateStatus: undefined,

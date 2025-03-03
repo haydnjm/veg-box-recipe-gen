@@ -2,13 +2,8 @@ name: Weekly Run
 
 on:
   schedule:
-<<<<<<< Updated upstream
     # Every saturday at 4am
     - cron: "0 4 * * 6"
-=======
-    # Every Saturday at 4am
-    - cron: ${{ env.SCHEDULE_CRON || '0 4 * * 6' }}
->>>>>>> Stashed changes
   workflow_dispatch:
 
 jobs:
