@@ -4,3 +4,4 @@ dist
 images
 supabase/*
 !supabase/migrations/
+.vscode/

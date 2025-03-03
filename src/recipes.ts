@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config";
-import { IngredientSchema, Recipe, RecipesSchema } from "./schemas.js";
+import { Recipe, RecipesSchema } from "./schemas.js";
 import { supabase } from "./clients/supabase.js";
 import { createImage } from "./images.js";
 import dayjs from "dayjs";
