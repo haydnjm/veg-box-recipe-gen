@@ -5,3 +5,4 @@ images
 supabase/*
 !supabase/migrations/
 .vscode/
+utils/
