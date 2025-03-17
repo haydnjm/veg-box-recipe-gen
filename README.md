@@ -1,15 +1,13 @@
-# Doosie
+# AI Veg Box
 
 A recipe assistant that emails you new healthy recipes each week, helping you plan your weekly meals and generate shopping lists.
 
-From the Dutch "doosje", meaning "box", as in your weekly recipe box!
 ![email preview of tofu noodles](assets/cover.png)
 
 ## Features
 
 - Automated weekly recipe suggestions
 - Email delivery every Saturday morning
-- App for managing shopping lists/viewing recipe instructions (TODO)
 
 ## Pre-reqs
 
