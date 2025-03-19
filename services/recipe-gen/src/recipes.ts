@@ -21,7 +21,7 @@ async function generateRecipeData(): Promise<Recipe[]> {
     .from("recipes")
     .select("*")
     .order("created_at", { ascending: false })
-    .limit(6);
+    .limit(10);
 
   try {
     const recipeSession = gemini2_0_flash
@@ -85,7 +85,31 @@ Last weeks recipes were ${previousRecipeNames}, so please suggest something diff
 export async function createRecipes(): Promise<Recipe[]> {
   const recipes = await generateRecipeData();
 
-  for (const recipe of recipes) {
+  const { data: savedRecipes, error } = await supabase
+    .from("recipes")
+    .insert(
+      recipes.map((r) => ({
+        name: r.name,
+        description: r.description,
+        main_ingredients: r.mainIngredients,
+        ingredients: r.ingredients.map((ing) => JSON.stringify(ing)),
+        instructions: r.instructions,
+        image: "",
+      }))
+    )
+    .select();
+
+  if (error) {
+    throw new Error(`Failed to save recipes: ${error.message}`);
+  }
+
+  const parsedRecipes = savedRecipes.map((r) => ({
+    ...r,
+    mainIngredients: r.main_ingredients,
+    ingredients: r.ingredients.map((ing) => JSON.parse(ing)),
+  }));
+
+  for (const recipe of parsedRecipes) {
     try {
       const image = await createImage(
         recipe.name,
