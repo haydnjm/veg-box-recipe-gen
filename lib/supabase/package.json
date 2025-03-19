@@ -1,0 +1,12 @@
+{
+  "name": "supabase",
+  "private": true,
+  "version": "1.0.0",
+  "description": "utils for managing supabase resources such as db migrations and functions",
+  "dependencies": {
+    "@supabase/functions-js": "^2.4.4"
+  },
+  "scripts": {
+    "gen": "supabase gen types --local typescript > lib/supabase/models/types.ts"
+  }
+}

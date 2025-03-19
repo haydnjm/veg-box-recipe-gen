@@ -16,6 +16,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "lib": "*",
     "@expo-google-fonts/abyssinica-sil": "^0.2.3",
     "@expo-google-fonts/inter": "^0.2.3",
     "@expo-google-fonts/merriweather": "^0.2.3",

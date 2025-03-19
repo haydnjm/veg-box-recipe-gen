@@ -22,14 +22,19 @@
         "noImplicitReturns": true,
         "jsx": "react",
         "jsxFactory": "React.createElement",
-        "jsxFragmentFactory": "React.Fragment"
+        "jsxFragmentFactory": "React.Fragment",
+        "paths": {
+            "lib": [
+                "../../lib"
+            ]
+        }
     },
     "include": [
         "src/**/*",
-        "../supabase/models"
+        "../../lib/supabase/models"
     ],
     "exclude": [
         "node_modules",
         "dist"
-    ]
+    ],
 }

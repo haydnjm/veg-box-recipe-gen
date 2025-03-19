@@ -20,6 +20,7 @@
     "emails:export": "email export --dir ./src/emails/templates"
   },
   "dependencies": {
+    "lib": "*",
     "@google-cloud/functions-framework": "^3.4.5",
     "@google/generative-ai": "^0.21.0",
     "@react-email/components": "0.0.33",
