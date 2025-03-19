@@ -16,8 +16,10 @@ jobs:
         with:
           node-version: "22"
       - name: Install Dependencies
+        working-directory: services/recipe-gen
         run: npm install
       - name: Run Script
+        working-directory: services/recipe-gen
         run: npm run start
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}

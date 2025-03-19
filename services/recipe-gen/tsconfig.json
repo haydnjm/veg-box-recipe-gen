@@ -1,4 +1,5 @@
 {
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "target": "ES2022",
         "module": "NodeNext",
@@ -8,7 +9,6 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "outDir": "dist",
-        "rootDir": "src",
         "lib": [
             "ES2022",
             "DOM",
@@ -23,15 +23,9 @@
         "jsx": "react",
         "jsxFactory": "React.createElement",
         "jsxFragmentFactory": "React.Fragment",
-        "paths": {
-            "lib": [
-                "../../lib"
-            ]
-        }
     },
     "include": [
-        "src/**/*",
-        "../../lib/supabase/models"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules",
